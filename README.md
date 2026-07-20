@@ -52,6 +52,20 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 4. **PCI SAQ-A** — dados de cartão nunca tocam o backend.
 5. **Concorrência** — estoque e cupons via operações atômicas no banco.
 
+## Deploy
+
+**Fronts na Vercel** (um projeto Vercel por app, mesmo repositório):
+
+| Projeto | Root Directory | Observações |
+|---|---|---|
+| loja | `apps/web` | domínio principal |
+| admin | `apps/admin` | subdomínio `admin.*` (§6.8) |
+
+- A Vercel detecta pnpm workspaces + Next.js automaticamente; o `vercel.json` de cada app usa `turbo-ignore` para só rebuildar quando o app (ou suas dependências internas) mudar.
+- Variáveis de ambiente dos fronts (ex.: `NEXT_PUBLIC_API_URL`) entram no painel da Vercel quando o M1+ precisar delas.
+
+**API NestJS fora da Vercel**: a API é um processo persistente (filas BullMQ, webhooks de pagamento, conexões Redis) — hospedar em Railway, Render ou Fly.io, com Postgres/Redis/Meilisearch/S3 gerenciados. O CORS da API já restringe origem a `WEB_URL`/`ADMIN_URL` (configurar com os domínios da Vercel).
+
 ## Milestones
 
 - [x] **M0 — Fundação**: monorepo, infra Docker, NestJS + Prisma (schema §5), Next.js base, tokens da marca, healthcheck
