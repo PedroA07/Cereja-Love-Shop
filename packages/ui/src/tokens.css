@@ -1,0 +1,53 @@
+/**
+ * Cereja Love Shop — Design Tokens (§6.9)
+ * Paleta extraída das referências de marca (assets/brand-reference/IDENTIDADE-VISUAL.md).
+ * Base clara (off-white/creme) + cereja como acento + vinho para profundidade.
+ */
+:root {
+  /* -------- Paleta bruta -------- */
+  --color-cereja: #a80c0c; /* primária — CTAs, destaques, logo */
+  --color-vinho: #540000; /* profunda — header/footer, hover de CTA */
+  --color-terracota: #a83c24; /* realces secundários, badges */
+  --color-rose: #9c6054; /* detalhes, ícones, estados sutis */
+  --color-nude: #c0a890; /* bordas, divisórias, texto secundário */
+  --color-creme: #e4d8b4; /* fundos de seção, cards */
+  --color-offwhite: #fcfcfc; /* fundo principal, superfícies */
+  --color-ink: #242418; /* texto principal */
+
+  /* Derivadas (tints/shades para estados) */
+  --color-cereja-600: #920a0a;
+  --color-cereja-700: #7c0808;
+  --color-creme-200: #f0e9d2;
+  --color-nude-200: #d9cbb8;
+
+  /* -------- Semânticos -------- */
+  --bg: var(--color-offwhite);
+  --bg-alt: var(--color-creme);
+  --surface: var(--color-offwhite);
+  --surface-dark: var(--color-vinho);
+  --primary: var(--color-cereja);
+  --primary-hover: var(--color-vinho);
+  --accent: var(--color-terracota);
+  --text: var(--color-ink);
+  --text-muted: #6b6456;
+  --border: var(--color-nude);
+  --ring: var(--color-cereja);
+
+  /* Feedback */
+  --success: #2f7d4f;
+  --warning: #b7791f;
+  --danger: #a80c0c;
+
+  /* -------- Tipografia -------- */
+  --font-serif: var(--font-display, 'Cormorant Garamond'), Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-body, 'Inter'), system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* -------- Forma / respiro (cantos suaves, respiro generoso) -------- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 9999px;
+
+  --shadow-soft: 0 1px 2px rgba(36, 36, 24, 0.04), 0 8px 24px rgba(84, 0, 0, 0.06);
+  --shadow-card: 0 2px 8px rgba(36, 36, 24, 0.06);
+}
