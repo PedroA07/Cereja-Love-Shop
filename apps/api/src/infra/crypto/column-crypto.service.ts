@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   createCipheriv,
   createDecipheriv,
+  createHash,
   randomBytes,
   type CipherGCM,
   type DecipherGCM,
@@ -25,13 +26,23 @@ export class ColumnCryptoService {
 
   constructor(config: ConfigService) {
     const raw = config.get<string>('security.columnEncryptionKey') ?? '';
-    const key = Buffer.from(raw, 'base64');
-    if (key.length !== 32) {
-      throw new Error(
-        'COLUMN_ENCRYPTION_KEY inválida: esperado 32 bytes em base64 (AES-256).',
-      );
+    this.key = ColumnCryptoService.deriveKey(raw);
+  }
+
+  /**
+   * Deriva a chave AES-256 (32 bytes) a partir de COLUMN_ENCRYPTION_KEY:
+   * aceita base64/hex de 32 bytes direto, ou deriva de qualquer segredo forte
+   * via SHA-256. Assim o host (ex.: Render) pode gerar a variável sozinho.
+   */
+  static deriveKey(raw: string): Buffer {
+    const value = raw?.trim() ?? '';
+    if (value.length < 16) {
+      throw new Error('COLUMN_ENCRYPTION_KEY ausente ou muito curta (mínimo 16 caracteres).');
     }
-    this.key = key;
+    const asBase64 = Buffer.from(value, 'base64');
+    if (asBase64.length === 32) return asBase64;
+    if (/^[0-9a-fA-F]{64}$/.test(value)) return Buffer.from(value, 'hex');
+    return createHash('sha256').update(value, 'utf8').digest();
   }
 
   encrypt(plaintext: string): Buffer {

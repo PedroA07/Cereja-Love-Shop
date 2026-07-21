@@ -1,0 +1,47 @@
+# Blueprint do Render para a API (NestJS) — deploy a partir do GitHub, sem terminal.
+# As migrações do banco rodam automaticamente no start (prisma migrate deploy).
+# No painel do Render, preencha apenas as variáveis marcadas como "sync: false".
+services:
+  - type: web
+    name: cereja-api
+    runtime: node
+    plan: free
+    region: oregon
+    branch: claude/new-session-ldcc45
+    rootDir: .
+    buildCommand: >-
+      corepack enable &&
+      pnpm install --frozen-lockfile &&
+      pnpm --filter @cereja/shared-types build &&
+      pnpm --filter @cereja/api exec prisma generate &&
+      pnpm --filter @cereja/api build
+    startCommand: >-
+      pnpm --filter @cereja/api exec prisma migrate deploy &&
+      node apps/api/dist/main.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      # --- Cole no painel do Render (valores do Supabase) ---
+      - key: DATABASE_URL # Supabase: Transaction pooler (porta 6543, ?pgbouncer=true)
+        sync: false
+      - key: DIRECT_URL # Supabase: conexão direta (porta 5432) — usada nas migrações
+        sync: false
+      # --- Cole no painel do Render (valor do Upstash) ---
+      - key: REDIS_URL # Upstash: rediss://... (TLS)
+        sync: false
+      # --- URLs públicas dos fronts na Vercel (para o CORS) ---
+      - key: WEB_URL
+        sync: false
+      - key: ADMIN_URL
+        sync: false
+      # --- Segredos gerados automaticamente pelo Render ---
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: COLUMN_ENCRYPTION_KEY
+        generateValue: true
