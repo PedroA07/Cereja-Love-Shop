@@ -42,8 +42,9 @@ export class ColumnCryptoService {
     return Buffer.concat([iv, authTag, ciphertext]);
   }
 
-  decrypt(blob: Buffer): string {
+  decrypt(input: Uint8Array): string {
     try {
+      const blob = Buffer.from(input);
       const iv = blob.subarray(0, ColumnCryptoService.IV_LEN);
       const authTag = blob.subarray(
         ColumnCryptoService.IV_LEN,

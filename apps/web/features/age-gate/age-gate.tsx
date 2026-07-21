@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Button } from '@cereja/ui';
+import { Button, CherryMark, IconQuickExit } from '@cereja/ui';
 
 const AGE_GATE_COOKIE = 'clv_age_ack';
 const AGE_GATE_TTL_HOURS = 24;
@@ -38,7 +38,10 @@ export function AgeGate({ children }: { children: React.ReactNode }) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-vinho/95 px-4">
         <div className="w-full max-w-md rounded-lg bg-offwhite p-8 text-center shadow-soft">
-          <p className="font-serif text-3xl text-vinho">Cereja Love Shop</p>
+          <p className="flex items-center justify-center gap-2 font-serif text-3xl text-vinho">
+            <CherryMark size={30} className="text-cereja" />
+            Cereja Love Shop
+          </p>
           <h1 className="mt-6 font-serif text-2xl">Conteúdo para maiores de 18 anos</h1>
           <p className="mt-3 text-sm text-ink/70">
             Este site vende produtos íntimos destinados exclusivamente a adultos. Ao continuar,
@@ -66,8 +69,9 @@ export function AgeGate({ children }: { children: React.ReactNode }) {
       <button
         onClick={quickExit}
         aria-label="Saída rápida"
-        className="fixed bottom-4 right-4 z-50 rounded-full bg-ink/80 px-4 py-2 text-xs font-medium text-offwhite shadow-soft transition-colors hover:bg-ink"
+        className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-1.5 rounded-full bg-ink/80 px-4 py-2 text-xs font-medium text-offwhite shadow-soft transition-colors hover:bg-ink"
       >
+        <IconQuickExit size={16} />
         Saída rápida
       </button>
     </>

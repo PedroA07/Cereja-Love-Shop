@@ -10,6 +10,7 @@ import '@fontsource/mulish/500.css';
 import '@fontsource/mulish/600.css';
 import '@fontsource/mulish/700.css';
 import './globals.css';
+import { AuthProvider } from '@/features/auth/auth-context';
 
 export const metadata: Metadata = {
   // Título neutro por discrição (§1.2) — sem termos explícitos em abas/histórico
@@ -26,7 +27,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-offwhite text-ink antialiased">{children}</body>
+      <body className="min-h-screen bg-offwhite text-ink antialiased">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
