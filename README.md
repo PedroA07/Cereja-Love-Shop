@@ -1,4 +1,4 @@
-# 🍒 Cereja Love Shop
+# Cereja Love Shop
 
 E-commerce adulto (18+) para o mercado brasileiro — lingerie, cosméticos e bem-estar íntimo, com **discrição** e **privacidade** como requisitos de negócio.
 
