@@ -1,5 +1,6 @@
 import { CherryMark, IconDiscreetPackage, IconEighteenPlus, IconShieldHeart } from '@cereja/ui';
 import { AgeGate } from '@/features/age-gate/age-gate';
+import { AuthNav } from '@/features/auth/auth-nav';
 
 const features = [
   {
@@ -28,11 +29,12 @@ export default function HomePage() {
             <CherryMark size={28} className="text-cereja" />
             Cereja Love Shop
           </span>
-          <nav className="hidden gap-8 text-sm text-ink/80 sm:flex">
+          <nav className="hidden gap-8 text-sm text-ink/80 lg:flex">
             <span className="cursor-not-allowed opacity-60">Lingerie</span>
             <span className="cursor-not-allowed opacity-60">Cosméticos</span>
             <span className="cursor-not-allowed opacity-60">Bem-estar</span>
           </nav>
+          <AuthNav />
         </div>
       </header>
 
