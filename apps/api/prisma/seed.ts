@@ -8,16 +8,26 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { authenticator } from 'otplib';
-import { createCipheriv, randomBytes } from 'node:crypto';
+import { createCipheriv, createHash, randomBytes } from 'node:crypto';
 
 const prisma = new PrismaClient();
 
+// Deriva a chave AES-256 igual ao ColumnCryptoService (base64/hex de 32 bytes,
+// ou SHA-256 de qualquer segredo forte).
+function deriveKey(raw: string): Buffer {
+  const value = (raw ?? '').trim();
+  if (value.length < 16) {
+    throw new Error('COLUMN_ENCRYPTION_KEY ausente ou muito curta (mínimo 16 caracteres).');
+  }
+  const asBase64 = Buffer.from(value, 'base64');
+  if (asBase64.length === 32) return asBase64;
+  if (/^[0-9a-fA-F]{64}$/.test(value)) return Buffer.from(value, 'hex');
+  return createHash('sha256').update(value, 'utf8').digest();
+}
+
 // Criptografia de coluna (mesmo formato do ColumnCryptoService): iv|tag|ct
 function encryptColumn(plaintext: string): Uint8Array<ArrayBuffer> {
-  const key = Buffer.from(process.env.COLUMN_ENCRYPTION_KEY ?? '', 'base64');
-  if (key.length !== 32) {
-    throw new Error('COLUMN_ENCRYPTION_KEY inválida (esperado 32 bytes base64).');
-  }
+  const key = deriveKey(process.env.COLUMN_ENCRYPTION_KEY ?? '');
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', key, iv);
   const ct = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
