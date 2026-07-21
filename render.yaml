@@ -23,6 +23,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "22"
       # --- Cole no painel do Render (valores do Supabase) ---
       - key: DATABASE_URL # Supabase: Transaction pooler (porta 6543, ?pgbouncer=true)
         sync: false
