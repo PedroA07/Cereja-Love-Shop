@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 // Fonte self-hosted (@fontsource) — build sem dependência de rede
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
+import '@fontsource/mulish/400.css';
+import '@fontsource/mulish/500.css';
+import '@fontsource/mulish/600.css';
+import '@fontsource/mulish/700.css';
 import './globals.css';
 
 export const metadata: Metadata = {

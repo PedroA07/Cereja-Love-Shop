@@ -31,8 +31,8 @@ module.exports = {
         'primary-hover': '#540000',
       },
       fontFamily: {
-        serif: ['var(--font-display)', 'Cormorant Garamond', 'Georgia', 'serif'],
-        sans: ['var(--font-body)', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-display)', 'Playfair Display', 'Georgia', 'serif'],
+        sans: ['var(--font-body)', 'Mulish', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         sm: '0.375rem',
