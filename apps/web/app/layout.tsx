@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 // Fontes self-hosted (@fontsource) — build sem dependência de rede
-import '@fontsource/cormorant-garamond/500.css';
-import '@fontsource/cormorant-garamond/600.css';
-import '@fontsource/cormorant-garamond/700.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
+// Títulos: Playfair Display · Texto: Mulish
+import '@fontsource/playfair-display/500.css';
+import '@fontsource/playfair-display/600.css';
+import '@fontsource/playfair-display/700.css';
+import '@fontsource/playfair-display/500-italic.css';
+import '@fontsource/mulish/400.css';
+import '@fontsource/mulish/500.css';
+import '@fontsource/mulish/600.css';
+import '@fontsource/mulish/700.css';
 import './globals.css';
 
 export const metadata: Metadata = {

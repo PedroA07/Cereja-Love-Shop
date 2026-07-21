@@ -5,11 +5,12 @@
 @tailwind utilities;
 
 :root {
-  --font-body: 'Inter';
+  --font-body: 'Mulish';
 }
 
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }

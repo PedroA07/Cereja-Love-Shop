@@ -5,12 +5,16 @@
 @tailwind utilities;
 
 :root {
-  --font-display: 'Cormorant Garamond';
-  --font-body: 'Inter';
+  --font-display: 'Playfair Display';
+  --font-body: 'Mulish';
 }
 
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
+  font-size: 1.0625rem; /* base ~17px para leitura confortável */
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }

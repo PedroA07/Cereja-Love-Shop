@@ -6,7 +6,7 @@ export default function HomePage() {
       <header className="border-b border-nude/40 bg-offwhite">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <span className="font-serif text-2xl font-semibold text-cereja">Cereja Love Shop</span>
-          <nav className="hidden gap-8 text-sm text-ink/70 sm:flex">
+          <nav className="hidden gap-8 text-sm text-ink/80 sm:flex">
             <span className="cursor-not-allowed opacity-60">Lingerie</span>
             <span className="cursor-not-allowed opacity-60">Cosméticos</span>
             <span className="cursor-not-allowed opacity-60">Bem-estar</span>
@@ -20,7 +20,7 @@ export default function HomePage() {
             <h1 className="mx-auto max-w-2xl font-serif text-5xl leading-tight text-vinho">
               Prazer é liberdade. Liberdade é ser quem você é.
             </h1>
-            <p className="mx-auto mt-6 max-w-xl text-ink/70">
+            <p className="mx-auto mt-6 max-w-xl text-ink/80">
               Lingerie, cosméticos e bem-estar íntimo com entrega sigilosa e embalagem discreta em
               todo o Brasil.
             </p>
@@ -47,7 +47,7 @@ export default function HomePage() {
           ].map((card) => (
             <div key={card.title} className="rounded-lg bg-offwhite p-6 shadow-card ring-1 ring-nude/30">
               <h2 className="font-serif text-xl text-vinho">{card.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink/70">{card.text}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink/80">{card.text}</p>
             </div>
           ))}
         </section>
