@@ -10,6 +10,7 @@ import { RedisModule } from './infra/redis/redis.module';
 import { AuthModule } from './common/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { IdentityModule } from './modules/identity/identity.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 
 /**
  * Monólito modular (§3). Módulos de domínio entram por milestone; identity é
@@ -31,6 +32,7 @@ import { IdentityModule } from './modules/identity/identity.module';
     AuthModule,
     HealthModule,
     IdentityModule,
+    CatalogModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
