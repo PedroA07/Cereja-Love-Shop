@@ -7,7 +7,7 @@ services:
     runtime: node
     plan: free
     region: oregon
-    branch: claude/new-session-ldcc45
+    branch: main
     rootDir: .
     buildCommand: >-
       corepack enable &&
