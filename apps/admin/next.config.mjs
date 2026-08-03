@@ -4,7 +4,9 @@ const nextConfig = {
   transpilePackages: ['@cereja/ui', '@cereja/shared-types'],
   // Proxy same-origin para a API (mesma abordagem da loja) — cookie first-party.
   async rewrites() {
-    const target = process.env.API_PROXY_TARGET;
+    const target =
+      process.env.API_PROXY_TARGET ??
+      (process.env.NODE_ENV !== 'production' ? 'http://localhost:3333' : undefined);
     if (!target) return [];
     const base = target.replace(/\/+$/, '');
     return [{ source: '/api/v1/:path*', destination: `${base}/api/v1/:path*` }];

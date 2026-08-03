@@ -3,7 +3,9 @@
  * httpOnly de refresh. O access token vive apenas em memória (auth-context),
  * nunca em localStorage (mitiga XSS).
  */
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333/api/v1';
+// Padrão: caminho relativo (proxy same-origin via next.config). Em dev, o
+// rewrite aponta para http://localhost:3333 automaticamente.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api/v1';
 
 export class ApiError extends Error {
   constructor(

@@ -7,7 +7,9 @@ const nextConfig = {
   // first-party (funciona mesmo com API e loja em domínios distintos, ex.:
   // vercel.app + onrender.com) e não há CORS. Defina API_PROXY_TARGET na Vercel.
   async rewrites() {
-    const target = process.env.API_PROXY_TARGET;
+    const target =
+      process.env.API_PROXY_TARGET ??
+      (process.env.NODE_ENV !== 'production' ? 'http://localhost:3333' : undefined);
     if (!target) return [];
     const base = target.replace(/\/+$/, '');
     return [{ source: '/api/v1/:path*', destination: `${base}/api/v1/:path*` }];
