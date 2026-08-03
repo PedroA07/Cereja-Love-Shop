@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@cereja/ui', '@cereja/shared-types'],
+  // Proxy same-origin para a API (mesma abordagem da loja) — cookie first-party.
+  async rewrites() {
+    const target = process.env.API_PROXY_TARGET;
+    if (!target) return [];
+    const base = target.replace(/\/+$/, '');
+    return [{ source: '/api/v1/:path*', destination: `${base}/api/v1/:path*` }];
+  },
   async headers() {
     return [
       {
