@@ -192,3 +192,24 @@ export function IconChevronRight(props: IconProps) {
     </Stroke>
   );
 }
+
+/** Sacola — carrinho de compras. */
+export function IconBag(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M6 8h12l-1 12H7L6 8Z" />
+      <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </Stroke>
+  );
+}
+
+/** Lixeira — remover item. */
+export function IconTrash(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M4 7h16" />
+      <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      <path d="M6 7l1 13h10l1-13" />
+    </Stroke>
+  );
+}

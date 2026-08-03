@@ -34,7 +34,8 @@ interface AuthContextValue {
   login: (email: string, password: string, totp?: string) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => Promise<void>;
-  accessToken: string | null;
+  /** Token de acesso atual (em memória), ou null. Sempre atualizado. */
+  getAccessToken: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -96,9 +97,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   }, []);
 
+  const getAccessToken = useCallback(() => tokenRef.current, []);
+
   const value = useMemo<AuthContextValue>(
-    () => ({ user, loading, login, register, logout, accessToken: tokenRef.current }),
-    [user, loading, login, register, logout],
+    () => ({ user, loading, login, register, logout, getAccessToken }),
+    [user, loading, login, register, logout, getAccessToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

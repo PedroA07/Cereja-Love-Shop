@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CherryMark } from '@cereja/ui';
 import { AuthNav } from '@/features/auth/auth-nav';
+import { CartNav } from '@/features/cart/cart-nav';
 
 const NAV = [
   { label: 'Lingerie', slug: 'lingerie' },
@@ -27,7 +28,10 @@ export function StoreHeader() {
             </Link>
           ))}
         </nav>
-        <AuthNav />
+        <div className="flex items-center gap-1">
+          <CartNav />
+          <AuthNav />
+        </div>
       </div>
     </header>
   );

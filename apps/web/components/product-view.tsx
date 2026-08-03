@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { formatBRL } from '@cereja/shared-types';
 import { Button, CherryMark, IconEye, IconEyeOff, cn } from '@cereja/ui';
 import type { ProductDetail, ProductVariant } from '@/lib/catalog';
+import { useCart } from '@/features/cart/cart-context';
 
 function variantLabel(v: ProductVariant): string {
   const opts = Object.values(v.options ?? {});
@@ -13,9 +15,26 @@ function variantLabel(v: ProductVariant): string {
 export function ProductView({ product }: { product: ProductDetail }) {
   const [selected, setSelected] = useState<ProductVariant>(product.variants[0]!);
   const [revealed, setRevealed] = useState(false);
+  const [qty, setQty] = useState(1);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+  const { add } = useCart();
+  const router = useRouter();
 
   const price = selected.salePriceCents ?? selected.priceCents;
   const hasImage = revealed && product.media.length > 0;
+
+  async function handleAdd() {
+    setAdding(true);
+    setAdded(false);
+    try {
+      await add(selected.id, qty);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2500);
+    } finally {
+      setAdding(false);
+    }
+  }
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
@@ -88,10 +107,37 @@ export function ProductView({ product }: { product: ProductDetail }) {
           {selected.inStock ? `${selected.available} em estoque` : 'Indisponível no momento'}
         </p>
 
-        <div className="mt-6">
-          <Button size="lg" disabled title="Carrinho chega no próximo passo">
-            Adicionar ao carrinho (em breve)
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="flex h-12 items-center rounded-md border border-nude">
+            <button
+              type="button"
+              aria-label="Diminuir"
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              className="flex h-full w-10 items-center justify-center text-lg text-ink/70 hover:text-cereja"
+            >
+              −
+            </button>
+            <span className="w-8 text-center text-sm">{qty}</span>
+            <button
+              type="button"
+              aria-label="Aumentar"
+              onClick={() => setQty((q) => Math.min(selected.available || 99, q + 1))}
+              className="flex h-full w-10 items-center justify-center text-lg text-ink/70 hover:text-cereja"
+            >
+              +
+            </button>
+          </div>
+          <Button size="lg" onClick={handleAdd} disabled={!selected.inStock || adding}>
+            {adding ? 'Adicionando…' : selected.inStock ? 'Adicionar ao carrinho' : 'Indisponível'}
           </Button>
+          {added && (
+            <button
+              onClick={() => router.push('/carrinho')}
+              className="text-sm font-medium text-cereja hover:text-vinho"
+            >
+              Adicionado! Ver carrinho →
+            </button>
+          )}
         </div>
 
         {product.description && (
