@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import { StockMovementType } from '@cereja/shared-types';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+
+/** Client transacional do Prisma (usado pelas operações de reserva). */
+export type TxClient = Prisma.TransactionClient;
 
 export interface StockResult {
   variantId: string;
@@ -63,6 +67,57 @@ export class InventoryService {
         available: fresh.quantity - fresh.reserved,
         version: fresh.version,
       };
+    });
+  }
+
+  /**
+   * Reserva estoque na criação do pedido (§6.4). UPDATE condicional atômico:
+   * só reserva se houver saldo livre (quantity - reserved >= qty). Retorna
+   * false se não houver disponibilidade — sem nunca superreservar.
+   * Deve ser chamado dentro de uma transação (recebe o client transacional).
+   */
+  async reserveIn(tx: TxClient, variantId: string, quantity: number): Promise<boolean> {
+    const affected = await tx.$executeRaw`
+      UPDATE inventory
+         SET reserved = reserved + ${quantity}, version = version + 1
+       WHERE variant_id = ${variantId}::uuid
+         AND quantity - reserved >= ${quantity}`;
+    if (affected === 0) return false;
+    await tx.stockMovement.create({
+      data: { variantId, type: StockMovementType.Reserva, quantity, reason: 'reserva de pedido' },
+    });
+    return true;
+  }
+
+  /** Libera reserva (cancelamento/expiração do pedido, §6.4). */
+  async releaseIn(
+    tx: TxClient,
+    variantId: string,
+    quantity: number,
+    reason = 'liberação de reserva',
+  ): Promise<void> {
+    await tx.$executeRaw`
+      UPDATE inventory
+         SET reserved = GREATEST(reserved - ${quantity}, 0), version = version + 1
+       WHERE variant_id = ${variantId}::uuid`;
+    await tx.stockMovement.create({
+      data: { variantId, type: StockMovementType.Liberacao, quantity, reason },
+    });
+  }
+
+  /**
+   * Converte reserva em saída definitiva (pagamento confirmado): baixa a
+   * quantidade e zera a reserva correspondente, atomicamente.
+   */
+  async commitReservationIn(tx: TxClient, variantId: string, quantity: number): Promise<void> {
+    await tx.$executeRaw`
+      UPDATE inventory
+         SET quantity = quantity - ${quantity},
+             reserved = GREATEST(reserved - ${quantity}, 0),
+             version = version + 1
+       WHERE variant_id = ${variantId}::uuid`;
+    await tx.stockMovement.create({
+      data: { variantId, type: StockMovementType.Saida, quantity, reason: 'venda confirmada' },
     });
   }
 
