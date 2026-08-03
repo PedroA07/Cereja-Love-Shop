@@ -163,3 +163,32 @@ export function IconEyeOff(props: IconProps) {
     </Stroke>
   );
 }
+
+/** Calendário — campo de data. */
+export function IconCalendar(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="3.5" y="5" width="17" height="16" rx="2" />
+      <path d="M3.5 9.5h17" />
+      <path d="M8 3.5v3M16 3.5v3" />
+    </Stroke>
+  );
+}
+
+/** Seta para a esquerda (navegação de mês). */
+export function IconChevronLeft(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M14.5 6 8.5 12l6 6" />
+    </Stroke>
+  );
+}
+
+/** Seta para a direita (navegação de mês). */
+export function IconChevronRight(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M9.5 6l6 6-6 6" />
+    </Stroke>
+  );
+}

@@ -21,7 +21,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           ref={ref}
           className={cn(
-            'h-11 rounded-md border border-nude bg-offwhite px-3 text-ink',
+            // font-sans explícito: campos de formulário não herdam a fonte do site
+            'h-11 rounded-md border border-nude bg-offwhite px-3 font-sans text-[15px] text-ink',
             'placeholder:text-ink/40',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cereja',
             error && 'border-cereja focus-visible:ring-cereja',

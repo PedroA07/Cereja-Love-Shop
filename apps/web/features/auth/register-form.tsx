@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Input } from '@cereja/ui';
+import { DateField } from '@/components/date-field';
 import { useAuth } from './auth-context';
 
 export function RegisterForm() {
@@ -17,6 +18,10 @@ export function RegisterForm() {
     setError(null);
     const form = new FormData(event.currentTarget);
 
+    if (!form.get('birthDate')) {
+      setError('Informe sua data de nascimento.');
+      return;
+    }
     if (!form.get('acceptedTerms')) {
       setError('É necessário aceitar os termos e a política de privacidade.');
       return;
@@ -48,7 +53,7 @@ export function RegisterForm() {
       <Input name="email" type="email" label="E-mail" autoComplete="email" required />
       <div className="grid grid-cols-2 gap-3">
         <Input name="cpf" label="CPF" inputMode="numeric" placeholder="000.000.000-00" required />
-        <Input name="birthDate" type="date" label="Data de nascimento" required />
+        <DateField name="birthDate" label="Data de nascimento" required />
       </div>
       <Input name="phone" label="Telefone (opcional)" autoComplete="tel" placeholder="+55 13 90000-0000" />
       <Input
