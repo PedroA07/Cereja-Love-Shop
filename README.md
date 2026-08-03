@@ -91,8 +91,8 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 
 - [x] **M0 — Fundação**: monorepo, infra Docker, NestJS + Prisma (schema §5), Next.js base, tokens da marca, healthcheck
 - [x] **M1 — Identity**: cadastro 18+ (validação no servidor) + CPF, Argon2id + HIBP, JWT + refresh rotativo (Redis), 2FA TOTP, RBAC por permissões, LGPD (consentimento/portabilidade/exclusão), telas de login/cadastro
-- [ ] M2 — Catalog (produtos, estoque ledger, Meilisearch, vitrine)
-- [ ] M3 — Cart & Checkout
+- [x] **M2 — Catalog**: produtos/variantes/categorias, workflow de publicação, estoque como ledger com operação atômica, vitrine e página de produto com thumbnail discreto
+- [x] **M3 — Cart & Checkout**: carrinho (convidado no Redis + logado persistido, com mesclagem no login), checkout de convidado first-class, reserva atômica de estoque, frete por região, máquina de estados do pedido e liberação por timeout
 - [ ] M4 — Payments (gateway porta/adaptador)
 - [ ] M5 — Coupons
 - [ ] M6 — Shipping & NF-e
