@@ -1,6 +1,8 @@
-import { CherryMark, IconDiscreetPackage, IconEighteenPlus, IconShieldHeart } from '@cereja/ui';
-import { AgeGate } from '@/features/age-gate/age-gate';
-import { AuthNav } from '@/features/auth/auth-nav';
+import Link from 'next/link';
+import { Button, IconDiscreetPackage, IconEighteenPlus, IconShieldHeart } from '@cereja/ui';
+import { StoreHeader } from '@/components/store-header';
+import { ProductGrid } from '@/components/product-grid';
+import { fetchProducts } from '@/lib/catalog';
 
 const features = [
   {
@@ -20,23 +22,12 @@ const features = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const featured = await fetchProducts({ page: 1 }).catch(() => null);
+
   return (
-    <AgeGate>
-      <header className="border-b border-nude/40 bg-offwhite">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <span className="flex items-center gap-2 font-serif text-2xl font-semibold text-cereja">
-            <CherryMark size={28} className="text-cereja" />
-            Cereja Love Shop
-          </span>
-          <nav className="hidden gap-8 text-sm text-ink/80 lg:flex">
-            <span className="cursor-not-allowed opacity-60">Lingerie</span>
-            <span className="cursor-not-allowed opacity-60">Cosméticos</span>
-            <span className="cursor-not-allowed opacity-60">Bem-estar</span>
-          </nav>
-          <AuthNav />
-        </div>
-      </header>
+    <>
+      <StoreHeader />
 
       <main>
         <section className="bg-creme/60">
@@ -48,12 +39,25 @@ export default function HomePage() {
               Lingerie, cosméticos e bem-estar íntimo com entrega sigilosa e embalagem discreta em
               todo o Brasil.
             </p>
-            <div className="mt-10 inline-flex items-center gap-2 rounded-full border border-nude bg-offwhite px-5 py-2 text-sm text-ink/70">
-              <CherryMark size={18} className="text-cereja" />
-              Loja em construção — Milestone 0 (fundação) concluído
+            <div className="mt-8">
+              <Link href="/produtos">
+                <Button size="lg">Ver produtos</Button>
+              </Link>
             </div>
           </div>
         </section>
+
+        {featured && featured.items.length > 0 && (
+          <section className="mx-auto max-w-6xl px-6 py-16">
+            <div className="mb-6 flex items-end justify-between">
+              <h2 className="font-serif text-3xl text-vinho">Destaques</h2>
+              <Link href="/produtos" className="text-sm text-cereja hover:text-vinho">
+                Ver todos
+              </Link>
+            </div>
+            <ProductGrid products={featured.items.slice(0, 8)} />
+          </section>
+        )}
 
         <section className="mx-auto grid max-w-6xl gap-6 px-6 py-16 sm:grid-cols-3">
           {features.map(({ icon: Icon, title, text }) => (
@@ -61,7 +65,7 @@ export default function HomePage() {
               <span className="flex h-11 w-11 items-center justify-center rounded-md bg-creme text-vinho">
                 <Icon size={24} />
               </span>
-              <h2 className="mt-4 font-serif text-xl text-vinho">{title}</h2>
+              <h3 className="mt-4 font-serif text-xl text-vinho">{title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink/80">{text}</p>
             </div>
           ))}
@@ -70,13 +74,10 @@ export default function HomePage() {
 
       <footer className="bg-vinho text-offwhite/80">
         <div className="mx-auto max-w-6xl px-6 py-10 text-center text-sm">
-          <p className="flex items-center justify-center gap-2 font-serif text-lg text-offwhite">
-            <CherryMark size={22} className="text-creme" />
-            Cereja Love Shop
-          </p>
+          <p className="font-serif text-lg text-offwhite">Cereja Love Shop</p>
           <p className="mt-2">Venda proibida para menores de 18 anos.</p>
         </div>
       </footer>
-    </AgeGate>
+    </>
   );
 }
