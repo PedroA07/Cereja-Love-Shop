@@ -4,6 +4,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { buildCorsOptions } from './config/cors';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,10 +25,9 @@ async function bootstrap(): Promise<void> {
   );
   app.use(cookieParser());
 
-  // CORS restrito às origens conhecidas (loja e admin)
-  const webUrl = process.env.WEB_URL ?? 'http://localhost:3000';
-  const adminUrl = process.env.ADMIN_URL ?? 'http://localhost:3001';
-  app.enableCors({ origin: [webUrl, adminUrl], credentials: true });
+  // CORS restrito às origens conhecidas (loja e admin), tolerante a barra
+  // final e a previews da Vercel do mesmo projeto.
+  app.enableCors(buildCorsOptions());
 
   // Validação estrita por DTO (§8): whitelist remove campos não declarados.
   app.useGlobalPipes(
