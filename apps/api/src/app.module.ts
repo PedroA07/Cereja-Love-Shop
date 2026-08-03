@@ -11,6 +11,7 @@ import { AuthModule } from './common/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { IdentityModule } from './modules/identity/identity.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
+import { CartModule } from './modules/cart/cart.module';
 
 /**
  * Monólito modular (§3). Módulos de domínio entram por milestone; identity é
@@ -33,6 +34,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
     HealthModule,
     IdentityModule,
     CatalogModule,
+    CartModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
