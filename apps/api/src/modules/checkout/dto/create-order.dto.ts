@@ -62,6 +62,12 @@ export class CreateOrderDto {
   @IsIn(['standard', 'express'])
   shippingCode!: string;
 
+  /** Código de cupom a aplicar no pedido (opcional). */
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  couponCode?: string;
+
   /** Aceite da política de devolução (arrependimento + exceção sanitária). */
   @IsBoolean()
   acceptedReturnPolicy!: boolean;

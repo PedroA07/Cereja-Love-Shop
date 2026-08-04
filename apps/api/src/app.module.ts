@@ -16,6 +16,7 @@ import { CartModule } from './modules/cart/cart.module';
 import { CheckoutModule } from './modules/checkout/checkout.module';
 import { ShippingModule } from './modules/shipping/shipping.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { CouponsModule } from './modules/coupons/coupons.module';
 
 /**
  * Monólito modular (§3). Módulos de domínio entram por milestone; identity é
@@ -44,6 +45,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
     ShippingModule,
     CheckoutModule,
     PaymentsModule,
+    CouponsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

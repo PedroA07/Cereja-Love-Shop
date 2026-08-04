@@ -11,6 +11,7 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { InventoryService } from '../catalog/inventory.service';
 import { ShippingService } from '../shipping/shipping.service';
 import { CartService, type CartContext } from '../cart/cart.service';
+import { CouponsService } from '../coupons/coupons.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { mapOrder } from './order.mapper';
 
@@ -26,6 +27,7 @@ export class CheckoutService {
     private readonly inventory: InventoryService,
     private readonly shipping: ShippingService,
     private readonly cart: CartService,
+    private readonly coupons: CouponsService,
   ) {}
 
   /**
@@ -53,10 +55,38 @@ export class CheckoutService {
     if (!quote) throw new BadRequestException('Opção de frete inválida');
 
     const subtotalCents = view.subtotalCents;
-    const shippingCents = quote.priceCents;
-    const totalCents = subtotalCents + shippingCents;
+    const baseShippingCents = quote.priceCents;
 
     const order = await this.prisma.$transaction(async (tx) => {
+      // 0) Cupom: valida e RESERVA o uso atomicamente (§6.7), antes do estoque
+      let discountCents = 0;
+      let shippingCents = baseShippingCents;
+      let appliedCoupon: { couponId: string; code: string; discountCents: number } | null = null;
+
+      if (dto.couponCode) {
+        const applied = await this.coupons.reserveIn(tx, {
+          code: dto.couponCode,
+          lines: view.items.map((i) => ({ productId: i.productId, lineCents: i.lineCents })),
+          subtotalCents,
+          shippingCents: baseShippingCents,
+          userId,
+          guestEmail: dto.guestEmail,
+        });
+        if (applied.freeShipping) {
+          shippingCents = 0;
+          discountCents = 0;
+        } else {
+          discountCents = applied.discountCents;
+        }
+        appliedCoupon = {
+          couponId: applied.couponId,
+          code: applied.code,
+          discountCents: applied.discountCents,
+        };
+      }
+
+      const totalCents = Math.max(0, subtotalCents + shippingCents - discountCents);
+
       // 1) Revalida preço/status e RESERVA cada item atomicamente
       for (const line of view.items) {
         const variant = await tx.productVariant.findUnique({
@@ -84,6 +114,7 @@ export class CheckoutService {
         reservationExpiresAt: new Date(
           Date.now() + RESERVATION_TTL_MINUTES * 60_000,
         ).toISOString(),
+        ...(appliedCoupon ? { coupon: { code: appliedCoupon.code } } : {}),
       } as unknown as Prisma.InputJsonValue;
 
       const created = await tx.order.create({
@@ -93,7 +124,7 @@ export class CheckoutService {
           status: OrderStatus.AwaitingPayment,
           subtotalCents: BigInt(subtotalCents),
           shippingCents: BigInt(shippingCents),
-          discountCents: BigInt(0),
+          discountCents: BigInt(discountCents),
           totalCents: BigInt(totalCents),
           shippingSnapshot,
           items: {
@@ -120,6 +151,17 @@ export class CheckoutService {
         },
         data: { orderId: created.id },
       });
+
+      // 4) Registra o resgate do cupom (a reserva do contador já foi feita)
+      if (appliedCoupon) {
+        await this.coupons.recordRedemptionIn(tx, {
+          couponId: appliedCoupon.couponId,
+          orderId: created.id,
+          discountCents: appliedCoupon.discountCents,
+          userId,
+          guestEmail: dto.guestEmail,
+        });
+      }
 
       return created;
     });
@@ -181,6 +223,8 @@ export class CheckoutService {
             await this.inventory.releaseIn(tx, item.variantId, item.quantity, 'pedido cancelado');
           }
         }
+        // Devolve o uso do cupom ao estoque de resgates (§6.7)
+        await this.coupons.releaseIn(tx, orderId);
       }
 
       const updated = await tx.order.update({
@@ -218,6 +262,7 @@ export class CheckoutService {
               );
             }
           }
+          await this.coupons.releaseIn(tx, order.id);
           await tx.order.update({
             where: { id: order.id },
             data: {
