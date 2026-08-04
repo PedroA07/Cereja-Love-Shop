@@ -34,6 +34,35 @@ export function CheckoutForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Cupom
+  const [couponInput, setCouponInput] = useState('');
+  const [coupon, setCoupon] = useState<{
+    code: string;
+    discountCents: number;
+    freeShipping: boolean;
+  } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
+
+  async function applyCoupon() {
+    const code = couponInput.trim();
+    if (!code) return;
+    setCheckingCoupon(true);
+    setCouponError(null);
+    try {
+      const res = await apiFetch<{ code: string; discountCents: number; freeShipping: boolean }>(
+        '/coupons/preview',
+        { method: 'POST', accessToken: getAccessToken() ?? undefined, body: { code } },
+      );
+      setCoupon(res);
+    } catch (err) {
+      setCoupon(null);
+      setCouponError(err instanceof Error ? err.message : 'Cupom inválido');
+    } finally {
+      setCheckingCoupon(false);
+    }
+  }
+
   // Cotação de frete reage à UF e ao subtotal
   useEffect(() => {
     if (subtotalCents <= 0) return;
@@ -51,7 +80,9 @@ export function CheckoutForm() {
   }, [uf, subtotalCents]);
 
   const shipping = options.find((o) => o.code === shippingCode);
-  const totalCents = subtotalCents + (shipping?.priceCents ?? 0);
+  const shippingCents = coupon?.freeShipping ? 0 : (shipping?.priceCents ?? 0);
+  const discountCents = coupon?.freeShipping ? 0 : (coupon?.discountCents ?? 0);
+  const totalCents = Math.max(0, subtotalCents + shippingCents - discountCents);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -71,6 +102,7 @@ export function CheckoutForm() {
         body: {
           ...(user ? {} : { guestEmail: String(form.get('guestEmail')) }),
           shippingCode,
+          ...(coupon ? { couponCode: coupon.code } : {}),
           acceptedReturnPolicy: true,
           address: {
             zipCode: String(form.get('zipCode')),
@@ -227,6 +259,54 @@ export function CheckoutForm() {
             </li>
           ))}
         </ul>
+        {/* Cupom de desconto */}
+        <div className="mt-4 border-t border-nude/40 pt-3">
+          {coupon ? (
+            <div className="flex items-center justify-between gap-2 rounded-md bg-offwhite px-3 py-2">
+              <span className="text-sm">
+                <span className="font-medium text-cereja">{coupon.code}</span>
+                <span className="block text-xs text-ink/50">
+                  {coupon.freeShipping ? 'Frete grátis aplicado' : 'Desconto aplicado'}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setCoupon(null);
+                  setCouponInput('');
+                }}
+                className="text-xs text-ink/50 hover:text-cereja"
+              >
+                Remover
+              </button>
+            </div>
+          ) : (
+            <>
+              <label htmlFor="coupon" className="text-sm font-medium text-ink">
+                Cupom de desconto
+              </label>
+              <div className="mt-1 flex gap-2">
+                <input
+                  id="coupon"
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                  placeholder="Digite o código"
+                  className="h-10 flex-1 rounded-md border border-nude bg-offwhite px-3 font-sans text-sm uppercase text-ink placeholder:normal-case placeholder:text-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cereja"
+                />
+                <button
+                  type="button"
+                  onClick={() => void applyCoupon()}
+                  disabled={checkingCoupon || !couponInput.trim()}
+                  className="h-10 rounded-md border border-nude px-3 text-sm text-ink hover:bg-creme disabled:opacity-50"
+                >
+                  {checkingCoupon ? '…' : 'Aplicar'}
+                </button>
+              </div>
+              {couponError && <p className="mt-1 text-xs text-cereja">{couponError}</p>}
+            </>
+          )}
+        </div>
+
         <div className="mt-4 border-t border-nude/40 pt-3 text-sm">
           <div className="flex justify-between text-ink/70">
             <span>Subtotal ({count})</span>
@@ -234,8 +314,22 @@ export function CheckoutForm() {
           </div>
           <div className="mt-1 flex justify-between text-ink/70">
             <span>Frete</span>
-            <span>{shipping ? (shipping.priceCents === 0 ? 'Grátis' : formatBRL(shipping.priceCents)) : '—'}</span>
+            <span>
+              {coupon?.freeShipping
+                ? 'Grátis'
+                : shipping
+                  ? shipping.priceCents === 0
+                    ? 'Grátis'
+                    : formatBRL(shipping.priceCents)
+                  : '—'}
+            </span>
           </div>
+          {discountCents > 0 && (
+            <div className="mt-1 flex justify-between text-cereja">
+              <span>Desconto ({coupon?.code})</span>
+              <span>− {formatBRL(discountCents)}</span>
+            </div>
+          )}
           <div className="mt-3 flex justify-between border-t border-nude/40 pt-3 text-base">
             <span className="font-medium text-ink">Total</span>
             <span className="font-semibold text-cereja">{formatBRL(totalCents)}</span>

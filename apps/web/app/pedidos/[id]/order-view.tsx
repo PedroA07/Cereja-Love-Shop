@@ -13,9 +13,15 @@ interface Order {
   status: string;
   subtotalCents: number;
   shippingCents: number;
+  discountCents: number;
   totalCents: number;
   createdAt: string;
-  shipping: { label?: string; etaDays?: number; address?: Record<string, string> } | null;
+  shipping: {
+    label?: string;
+    etaDays?: number;
+    address?: Record<string, string>;
+    coupon?: { code: string };
+  } | null;
   items: { id: string; name: string; quantity: number; lineCents: number }[];
   history: { status: string; at: string }[];
 }
@@ -149,6 +155,12 @@ export function OrderView({ orderId, email }: { orderId: string; email?: string 
             <span>Frete</span>
             <span>{order.shippingCents === 0 ? 'Grátis' : formatBRL(order.shippingCents)}</span>
           </div>
+          {order.discountCents > 0 && (
+            <div className="mt-1 flex justify-between text-cereja">
+              <span>Desconto{order.shipping?.coupon?.code ? ` (${order.shipping.coupon.code})` : ''}</span>
+              <span>− {formatBRL(order.discountCents)}</span>
+            </div>
+          )}
           <div className="mt-3 flex justify-between border-t border-nude/40 pt-3">
             <span className="font-medium text-ink">Total</span>
             <span className="font-semibold text-cereja">{formatBRL(order.totalCents)}</span>

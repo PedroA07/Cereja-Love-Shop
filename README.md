@@ -96,7 +96,7 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 - [x] **M2 — Catalog**: produtos/variantes/categorias, workflow de publicação, estoque como ledger com operação atômica, vitrine e página de produto com thumbnail discreto
 - [x] **M3 — Cart & Checkout**: carrinho (convidado no Redis + logado persistido, com mesclagem no login), checkout de convidado first-class, reserva atômica de estoque, frete por região, máquina de estados do pedido e liberação por timeout
 - [x] **M4 — Payments**: interface `PaymentGateway` (porta/adaptador) com adaptador sandbox, PIX/boleto/cartão parcelado tokenizado (PCI SAQ-A), webhooks assinados e idempotentes, integração com a máquina de estados do pedido
-- [ ] M5 — Coupons
+- [x] **M5 — Coupons**: motor de regras (validade, mínimo, escopo, primeira compra, limites, teto), resgate atômico (cupom esgotado não passa nem sob concorrência), campo de cupom no checkout e gestão no back-office
 - [ ] M6 — Shipping & NF-e
 - [ ] M7 — Back-office & BI
 - [ ] M8 — Engagement & hardening
