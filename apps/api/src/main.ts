@@ -7,7 +7,8 @@ import { AppModule } from './app.module';
 import { buildCorsOptions } from './config/cors';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // rawBody: necessário para verificar a assinatura dos webhooks (§6.5)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
   const logger = new Logger('Bootstrap');
 
   // Segurança de transporte/headers (§8): CSP, X-Frame-Options,
