@@ -3,6 +3,14 @@
 Itens que **não bloqueiam** o desenvolvimento, mas precisam ser resolvidos antes
 da loja operar de verdade. Atualize o status conforme forem sendo resolvidos.
 
+> 📌 **Este projeto é para um cliente.** CNPJ, conta bancária, gateway e
+> certificado digital ficam **em nome do cliente** — o desenvolvedor apenas
+> configura. Ver [`docs/comercial/`](./docs/comercial/):
+> - [`RESPONSABILIDADES.md`](./docs/comercial/RESPONSABILIDADES.md) — quem responde por quê
+> - [`CHECKLIST-CLIENTE.md`](./docs/comercial/CHECKLIST-CLIENTE.md) — enviar ao cliente
+> - [`GUIA-PRECIFICACAO.md`](./docs/comercial/GUIA-PRECIFICACAO.md) — como cobrar
+> - [`PROPOSTA-MODELO.md`](./docs/comercial/PROPOSTA-MODELO.md) — modelo de proposta
+
 ---
 
 ## 1. Gateway de pagamento real — PENDENTE
