@@ -65,6 +65,8 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 | POST | `/staff/auth/login` | Login de staff (senha + 2FA obrigatório) |
 | GET | `/staff/auth/me` | Perfil + permissões (RBAC) |
 
+> **Pendências externas** (gateway real, seed em produção, NF-e): ver [`PENDENCIAS.md`](./PENDENCIAS.md).
+
 ## Princípios inegociáveis
 
 1. **18+** — maioridade validada **sempre no servidor** (via `birth_date`).
