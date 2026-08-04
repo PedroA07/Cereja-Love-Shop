@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { AuditInterceptor } from '../../common/audit/audit.interceptor';
 import type { ProductStatus } from '@cereja/shared-types';
 import { AuthType, CurrentUser, RequirePermissions } from '../../common/auth/decorators';
 import { JwtAuthGuard } from '../../common/auth/jwt-auth.guard';
@@ -14,6 +25,7 @@ import { ChangeStatusDto, AddMediaDto } from './dto/admin-actions.dto';
 /** Back-office de catálogo (§6.2/§6.8) — protegido por RBAC. */
 @Controller('catalog/admin')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseInterceptors(AuditInterceptor)
 @AuthType('staff')
 export class CatalogAdminController {
   constructor(

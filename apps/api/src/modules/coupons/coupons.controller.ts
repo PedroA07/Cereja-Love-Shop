@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { AuditInterceptor } from '../../common/audit/audit.interceptor';
 import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 import { AuthType, CurrentUser, RequirePermissions } from '../../common/auth/decorators';
@@ -49,6 +61,7 @@ export class CouponsController {
 /** Gestão de cupons no back-office (§6.7) — exige permissão coupon:manage. */
 @Controller('coupons/admin')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseInterceptors(AuditInterceptor)
 @AuthType('staff')
 export class CouponsAdminController {
   constructor(private readonly coupons: CouponsService) {}
