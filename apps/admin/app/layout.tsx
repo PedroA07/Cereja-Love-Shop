@@ -5,6 +5,8 @@ import '@fontsource/mulish/500.css';
 import '@fontsource/mulish/600.css';
 import '@fontsource/mulish/700.css';
 import './globals.css';
+import { StaffAuthProvider } from '@/features/auth/staff-auth-context';
+import { AdminShell } from '@/components/admin-shell';
 
 export const metadata: Metadata = {
   title: 'Cereja — Admin',
@@ -14,7 +16,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-offwhite text-ink antialiased">{children}</body>
+      <body className="min-h-screen bg-creme/20 text-ink antialiased">
+        <StaffAuthProvider>
+          <AdminShell>{children}</AdminShell>
+        </StaffAuthProvider>
+      </body>
     </html>
   );
 }

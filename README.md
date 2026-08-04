@@ -98,5 +98,5 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 - [x] **M4 — Payments**: interface `PaymentGateway` (porta/adaptador) com adaptador sandbox, PIX/boleto/cartão parcelado tokenizado (PCI SAQ-A), webhooks assinados e idempotentes, integração com a máquina de estados do pedido
 - [x] **M5 — Coupons**: motor de regras (validade, mínimo, escopo, primeira compra, limites, teto), resgate atômico (cupom esgotado não passa nem sob concorrência), campo de cupom no checkout e gestão no back-office
 - [ ] M6 — Shipping & NF-e
-- [ ] M7 — Back-office & BI
+- [x] **M7 — Back-office**: painel isolado com login de staff (2FA obrigatório), visão geral, gestão de pedidos (máquina de estados), produtos (criar/publicar), cupons e auditoria de todas as ações de staff
 - [ ] M8 — Engagement & hardening
