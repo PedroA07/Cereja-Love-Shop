@@ -203,6 +203,57 @@ export function IconBag(props: IconProps) {
   );
 }
 
+/** QR code — pagamento por PIX. */
+export function IconPix(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="3.5" y="3.5" width="6" height="6" rx="1" />
+      <rect x="14.5" y="3.5" width="6" height="6" rx="1" />
+      <rect x="3.5" y="14.5" width="6" height="6" rx="1" />
+      <path d="M14.5 14.5h3v3h-3zM20.5 17.5v3h-3" />
+    </Stroke>
+  );
+}
+
+/** Código de barras — boleto. */
+export function IconBarcode(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M4 6v12M7.5 6v12M11 6v9M14.5 6v12M18 6v12M20.5 6v9" />
+    </Stroke>
+  );
+}
+
+/** Cartão de crédito. */
+export function IconCard(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2" />
+      <path d="M2.5 10h19" />
+      <path d="M6 14.5h3" />
+    </Stroke>
+  );
+}
+
+/** Cópia — copiar código. */
+export function IconCopy(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" />
+    </Stroke>
+  );
+}
+
+/** Confirmação — sucesso. */
+export function IconCheck(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M20 6 9 17l-5-5" />
+    </Stroke>
+  );
+}
+
 /** Lixeira — remover item. */
 export function IconTrash(props: IconProps) {
   return (
