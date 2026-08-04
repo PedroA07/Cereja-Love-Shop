@@ -99,4 +99,4 @@ Healthcheck da API: `GET http://localhost:3333/health` e `/health/ready`.
 - [x] **M5 — Coupons**: motor de regras (validade, mínimo, escopo, primeira compra, limites, teto), resgate atômico (cupom esgotado não passa nem sob concorrência), campo de cupom no checkout e gestão no back-office
 - [ ] M6 — Shipping & NF-e
 - [x] **M7 — Back-office**: painel isolado com login de staff (2FA obrigatório), visão geral, gestão de pedidos (máquina de estados), produtos (criar/publicar), cupons e auditoria de todas as ações de staff
-- [ ] M8 — Engagement & hardening
+- [x] **M8 — Engagement & hardening**: lista de desejos, avaliações com moderação obrigatória (só após compra confirmada), filtro global de erros sem stack trace, headers de segurança endurecidos (CSP/HSTS/Permissions-Policy) e limite de payload

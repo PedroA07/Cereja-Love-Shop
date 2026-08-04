@@ -203,6 +203,47 @@ export function IconBag(props: IconProps) {
   );
 }
 
+/** Coração — lista de desejos. `filled` marca o item já salvo. */
+export function IconHeart({ filled, ...props }: IconProps & { filled?: boolean }) {
+  return (
+    <svg
+      width={props.size ?? 24}
+      height={props.size ?? 24}
+      viewBox="0 0 24 24"
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path d="M12 20.3c-5.2-3-8.2-6-8.2-9.2A4.3 4.3 0 0 1 12 8.4a4.3 4.3 0 0 1 8.2 2.7c0 3.2-3 6.2-8.2 9.2Z" />
+    </svg>
+  );
+}
+
+/** Estrela — avaliação. `filled` para a nota preenchida. */
+export function IconStar({ filled, ...props }: IconProps & { filled?: boolean }) {
+  return (
+    <svg
+      width={props.size ?? 24}
+      height={props.size ?? 24}
+      viewBox="0 0 24 24"
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3.6Z" />
+    </svg>
+  );
+}
+
 /** QR code — pagamento por PIX. */
 export function IconPix(props: IconProps) {
   return (

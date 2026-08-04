@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { StoreHeader } from '@/components/store-header';
 import { ProductView } from '@/components/product-view';
+import { ProductReviews } from '@/features/reviews/product-reviews';
 import { fetchProductBySlug } from '@/lib/catalog';
 
 type Params = Promise<{ slug: string }>;
@@ -31,6 +32,7 @@ export default async function ProductPage({ params }: { params: Params }) {
           <span className="text-ink/70">{product.name}</span>
         </nav>
         <ProductView product={product} />
+        <ProductReviews productId={product.id} />
       </main>
     </>
   );

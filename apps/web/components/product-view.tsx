@@ -6,6 +6,7 @@ import { formatBRL } from '@cereja/shared-types';
 import { Button, CherryMark, IconEye, IconEyeOff, cn } from '@cereja/ui';
 import type { ProductDetail, ProductVariant } from '@/lib/catalog';
 import { useCart } from '@/features/cart/cart-context';
+import { WishlistButton } from '@/features/wishlist/wishlist-button';
 
 function variantLabel(v: ProductVariant): string {
   const opts = Object.values(v.options ?? {});
@@ -130,6 +131,7 @@ export function ProductView({ product }: { product: ProductDetail }) {
           <Button size="lg" onClick={handleAdd} disabled={!selected.inStock || adding}>
             {adding ? 'Adicionando…' : selected.inStock ? 'Adicionar ao carrinho' : 'Indisponível'}
           </Button>
+          <WishlistButton productId={product.id} withLabel className="h-12 px-2" />
           {added && (
             <button
               onClick={() => router.push('/carrinho')}

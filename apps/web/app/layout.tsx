@@ -12,6 +12,7 @@ import '@fontsource/mulish/700.css';
 import './globals.css';
 import { AuthProvider } from '@/features/auth/auth-context';
 import { CartProvider } from '@/features/cart/cart-context';
+import { WishlistProvider } from '@/features/wishlist/wishlist-context';
 import { AgeGate } from '@/features/age-gate/age-gate';
 
 export const metadata: Metadata = {
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-offwhite text-ink antialiased">
         <AuthProvider>
           <CartProvider>
-            <AgeGate>{children}</AgeGate>
+            <WishlistProvider>
+              <AgeGate>{children}</AgeGate>
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

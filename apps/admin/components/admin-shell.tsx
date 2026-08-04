@@ -11,6 +11,7 @@ const NAV = [
   { href: '/pedidos', label: 'Pedidos', permission: 'order:read' },
   { href: '/produtos', label: 'Produtos', permission: 'product:update' },
   { href: '/cupons', label: 'Cupons', permission: 'coupon:manage' },
+  { href: '/avaliacoes', label: 'Avaliações', permission: 'content:manage' },
   { href: '/auditoria', label: 'Auditoria', permission: 'user:manage' },
 ];
 
