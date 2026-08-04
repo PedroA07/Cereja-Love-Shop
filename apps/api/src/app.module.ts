@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { appConfig, securityConfig } from './config/app.config';
@@ -18,6 +18,8 @@ import { ShippingModule } from './modules/shipping/shipping.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { CouponsModule } from './modules/coupons/coupons.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { EngagementModule } from './modules/engagement/engagement.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 /**
  * Monólito modular (§3). Módulos de domínio entram por milestone; identity é
@@ -48,7 +50,12 @@ import { AdminModule } from './modules/admin/admin.module';
     PaymentsModule,
     CouponsModule,
     AdminModule,
+    EngagementModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // Nunca vaza stack trace ao cliente (§10)
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+  ],
 })
 export class AppModule {}
