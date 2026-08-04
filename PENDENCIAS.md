@@ -10,6 +10,7 @@ da loja operar de verdade. Atualize o status conforme forem sendo resolvidos.
 > - [`CHECKLIST-CLIENTE.md`](./docs/comercial/CHECKLIST-CLIENTE.md) — enviar ao cliente
 > - [`GUIA-PRECIFICACAO.md`](./docs/comercial/GUIA-PRECIFICACAO.md) — como cobrar
 > - [`PROPOSTA-MODELO.md`](./docs/comercial/PROPOSTA-MODELO.md) — modelo de proposta
+> - [`CONTRATO-MODELO.md`](./docs/comercial/CONTRATO-MODELO.md) — rascunho de contrato (revisar com advogado)
 
 ---
 
